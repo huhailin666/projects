@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+  <title>商品列表</title>
+  <style>
+    * {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+.box {
+  width: 902px;
+  margin: 0 auto;
+}
+button {
+  padding: 8px;
+  border: 2px solid red;
+  border-radius: 5px;
+  background: #fff;
+  margin: 10px;
+  color:red;
+}
+.contain {
+  width: 250px;
+    height: 300px;
+  margin-right: 50px;
+  border: 1px solid;
+  position: relative;
+}
+
+img {
+  padding: 10px 0px 24px 24px;
+  padding-bottom: 0;
+}
+p{
+  padding-left: 24px;
+}
+p:last-child {
+  margin-top: 20px;
+}
+.delet {
+  position: absolute;
+  top: 130px;
+  left: 90px;
+  display: none;
+}
+.mask.active {
+  height: 300px;
+  top     : 0;
+  left    : 0;
+  bottom  : 0;
+  right   : 0;
+  background:rgba(20,20,20,.5);
+}
+.wrap {
+  display: flex;
+  //border: 1px solid;
+  flex-flow: row wrap ; 
+}
+
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>珠宝首饰</h1>
+    <div class="wrap">
+      <div class="contain">
+        <div class="mask">
+          <img src="https://picsum.photos/200/200/?image=10" alt="">
+          <p>蝶恋黄金手链</p>
+          <p>￥1699.00</p>
+          <button class="delet ">删除</button>
+        </div>
+      </div>
+      <div class="contain">
+        <div class="mask">
+          <img src="https://picsum.photos/200/200/?image=8" alt="">
+          <p>蝶恋黄金手链</p>
+          <p>￥1699.00</p>
+          <button class="delet active">删除</button>
+        </div>
+      </div>      
+      <div class="contain">
+        <div class="mask">
+          <img src="https://picsum.photos/200/200/?image=5" alt="">
+          <p>蝶恋黄金手链</p>
+          <p>￥1699.00</p>
+          <button class="delet active">删除</button>
+        </div>
+      </div>      
+    </div> 
+    <button class="add">添加</button> 
+    <button class="edit">编辑</button>    
+  </div>
+  <script>
+        //添加图片
+$('.add').on('click',function(){
+  for(var i = 0;i<3; i++){
+    var b = Math.floor(Math.random()*100+1);
+    var src = "https://picsum.photos/200/200/?image=" + b ;
+    var obj = $('<div class="contain"><div class="mask"><img src="" alt=""><p>奇珍异宝</p><p>123</p><button class="delet active">删除</button></div></div>');
+    obj.children().children('p').eq(1).text( '￥' + b + ".00")
+   // console.log(obj.children('p'))
+    obj.children().children('img').attr("src",src);
+    $('.wrap').append(obj); 
+}
+  $('.mask').removeClass('active')
+  $('.delet').css("display","none")
+})
+
+//编辑图片
+$('.edit').on('click',function(){
+
+  $('.mask').toggleClass('active')
+  if($('.delet').css("display") === "block"){
+    $('.delet').css("display","none")
+  }else{
+    $('.delet').css("display","block")
+
+  }
+    
+})
+
+//删除图片
+$('.wrap').on('click','.delet',function(){
+  $(this).parents('.contain').remove()
+})
+  </script>
+</body>
+</html>
