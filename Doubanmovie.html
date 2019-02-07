@@ -23,11 +23,13 @@
     /* main部分 */
     main {
       height: calc(100vh - 60px);
-      overflow: scroll;
-      -webkit-overflow-scrolling: touch;
+
     }
     section {
       display: none;
+      height: calc(100vh - 60px);
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
     }
     section:first-child {
       display: block;
@@ -67,7 +69,6 @@
       padding: 5px;
       text-align: center;
       display: none;
-      background: red;
       z-index: 2;
     }
 
@@ -81,7 +82,6 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     /* footer部分的css */
     footer {
       width: 100%;
@@ -137,7 +137,7 @@
   <script>
     var top250 = {
       init: function(){
-        this.element = $('#top250')
+        this.$element = $('#top250')
         this.isLoading = false
         this.index = 0;
         this.isFinish = false;
@@ -146,9 +146,18 @@
       },
       bind: function(){
         var _this = this;
-        this.element.scroll(function(){
-          _this.start()
-        })
+        var clock;
+        _this.$element.scroll(function(){
+          if(clock){
+            clearTimeout(clock);
+          }
+          clock = setTimeout(function(){
+            if(_this.$element.find('.container').height() <= _this.$element.height()+ _this.$element.scrollTop() + 10){
+              console.log('请求数据中');
+              _this.start();
+            }
+          },300);
+        });
       },
       start: function(){
         var _this = this;
@@ -160,7 +169,7 @@
         var _this = this;
         if(_this.isLoading) return;
         _this.isLoading = true;
-        _this.element.find('.loading').show()
+        _this.$element.find('.loading').show()
         $.ajax({
           url: 'https://api.douban.com/v2/movie/top250',
           data: {
@@ -179,7 +188,7 @@
           console.log('数据异常')
         }).always(function(){
           _this.isLoading = false
-          _this.element.find('.loading').hide()
+          _this.$element.find('.loading').hide()
         })
       },
       render: function(data){
@@ -217,9 +226,6 @@
           $('#top250').find('.container').append($node)
         })
       },
-      isToBottom: function(){
-        return $('#top250').find('.container') <= this.$element.height()+this.$element.scrollTop() + 10
-      }
     }
 
     var usBox = {
