@@ -71,6 +71,24 @@
       display: none;
       z-index: 2;
     }
+    /*搜索框的样式*/
+    .search-area {
+      margin-top: 15px;
+        margin-left: 15px;
+    }
+
+    input {
+      width: calc(100% - 60px);
+      height: 30px;
+    }
+    .button {
+      padding: 3px;
+      font-size: 16px;
+      border: 1px solid red;
+      background: red;
+      color: #fff;
+    }
+
 
     /* 懒加载效果 */
     .iconfont.icon-xingzhuang {
@@ -115,7 +133,8 @@
     </section>
     <section id="search">
       <div class="search-area">
-        <input type="text" placeholder=""><button>搜索</button>
+        <input type="text" placeholder="">
+        <span class="button">搜索</span>
       </div>
       <div class="container"></div>
     </section>
@@ -306,7 +325,7 @@
       },
       bind: function(){
         var _this = this;
-        this.$element.find('button').click(function(){
+        this.$element.find('.button').click(function(){
           _this.keyword = _this.$element.find('input').val()
           _this.start();
         })
