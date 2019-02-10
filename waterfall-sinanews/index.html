@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+  <meta charset="UTF-8">
+  <title>瀑布流新闻网站</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    ul,li {
+      list-style: none
+    }
+    .clearfix:after {
+      content: '';
+      display: block;
+      clear: both;
+
+    }
+    a {
+      text-decoration: none;
+    }
+    img {
+      width: 200px;
+    }
+    ul {
+      position: relative;
+    }
+    li {
+      position: absolute;
+      padding:  10px ;
+      width: 200px;
+      margin: 10px;
+      border: 1px solid #DFDFDF;
+      background: #fff;
+      transition: all .8s;
+    }
+    li .header {
+      height: 25px;
+      border-bottom: 1px solid #DBDBDB
+    }
+    li .describe {
+      font-size:12px;
+      line-height: 1.8;
+      color: #777371;
+    }
+    h4 {
+      width: 200px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    p {  
+      width: 200px;
+      overflow: hidden;
+      white-space: wrap;
+      text-overflow: ellipsis;
+    }
+    .item1 {
+      display: none;
+    }
+
+    .wrap {
+      width: 80%;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="container">
+      <ul id="pic" class="ct">
+        <li class="item1">
+          <a href="http://slide.tech.sina.com.cn/d/slide_5_453_125463.html/d/2" class="link"><img src="http://n.sinaimg.cn/tech/transform/200/w600h400/20190208/pb0J-hsqyiwu2413345.jpg" alt=""></a>
+          <h4 class="header">动物网红养成记 凭实力出的道</h4>
+          <p class="describe"></p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script>
+
+    var curPage = 1;
+    var perPageCount = 20;
+    var newWidth;
+    var minValue;
+    function start(){
+      var _this = this;
+      getData(function(data){ 
+        render(data);
+        waterfall();
+      });
+    }
+    start();
+    /*瀑布流布局*/
+    function waterfall(){
+      var _this = this;
+      newWidth = $('.item').outerWidth();
+
+      var colHeightArray = [];
+      var colCount= Math.floor($('.container').width()/$('.item1').width());
+      for(var i = 0; i<colCount; i++){
+        colHeightArray[i] = 0;
+      }
+      console.log('实现瀑布流布局');
+      $('.item').each(function(){
+        minValue = colHeightArray[0];
+        var minIndex = 0;
+        for(var i = 0; i<colCount; i++){
+          if(colHeightArray[i] < minValue){
+            minValue = colHeightArray[i];
+            minIndex = i;
+          }
+        }      
+        //console.log(colHeightArray,minValue)
+
+        $(this).css({
+          left: minIndex * newWidth,
+          top: minValue
+        }); 
+        colHeightArray[minIndex] += $(this).outerHeight(true);
+      });
+
+    }
+    /*滑到底部继续获取数据*/
+    var clock;
+    $(window).scroll(function(){
+      if(clock){clearTimeout(clock);}
+      clock = setTimeout(function(){
+        if(isToBottom()){
+          start(); 
+        }
+      },300);
+    }); 
+
+
+
+    /*判断是否到底部函数*/
+    function isToBottom(){
+      return $(window).height()+$(window).scrollTop() >= minValue;
+      
+    }
+
+    /*获取数据*/
+    function getData(callback){
+    $.ajax({
+          url: 'http://platform.sina.com.cn/slide/album_tech',
+          dataType: 'jsonp',   
+          jsonp:"jsoncallback",
+          data: {
+            app_key: '1271687855',
+            num: perPageCount,
+            page: curPage
+          }
+        }).done(function(ret){
+          if(ret && ret.status && ret.status.code === "0"){
+                  console.log('数据到了');
+                  data= ret.data;         
+    callback&&callback(data);
+              
+                  $('.item1 img').attr('src',ret.data[0].img_url);
+            //callback(ret.data); 
+    $('.item1 a').attr('href',ret.data[0].url);
+    $('.item1 h4').text(ret.data[0].short_name);
+    $('.item1 p').text(ret.data[0].name);
+          
+            curPage++;
+          }else{
+            console.log('get error data');
+          }
+        });
+    }
+
+    /*渲染数据*/
+    function render(data){
+      console.log('数据渲染了');
+      var tpl = '',$nodes;
+      for(var i = 0 ; i < data.length;i++){
+        tpl += '<li class = "item">';
+        tpl += '<a href = "' + data[i].url +'"class="link"><img src ="' + data[i].img_url + '" alt=""></a>';
+        tpl += '<h4 class="header">' + data[i].short_name + '</h4>';
+        tpl += '<p class="describe">' +data[i].name + '</p>';
+        tpl += '</li>';
+      }
+      $('#pic').append($(tpl));
+      return $(tpl);
+    }
+  </script>
+</body>
+</html>
