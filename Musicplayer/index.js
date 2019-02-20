@@ -158,7 +158,7 @@ var Fm = {
   },
   /*加载歌词 */
   loadLyric: function(){
-    $.getJSON('http://api.jirengu.com/fm/getLyric.php',{sid: _this.song.sid}).done(function(ret){
+    $.getJSON('https://jirenguapi.applinzi.com/fm/getLyric.php',{sid: _this.song.sid}).done(function(ret){
       var lyric = ret.lyric
       var lyricObj = {}
       /*lyric.split('\n')让其成为数组 */
@@ -193,7 +193,7 @@ var Fm = {
   loadMusic: function(callback){
     _this = this
     clearInterval(_this.clock)
-    $.getJSON('http://api.jirengu.com/fm/getSong.php',{channel: _this.channelId})
+    $.getJSON('https://jirenguapi.applinzi.com/fm/getSong.php',{channel: _this.channelId})
     .done(function(ret){
       _this.song = ret.song[0]
       callback()
