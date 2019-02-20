@@ -115,58 +115,63 @@ h1 {
   opacity: 0;
 }
 /*footer样式*/
-footer.layout {
-  margin-top: 5vh;
+footer {
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0px -0.25vh 0.25vh 0.25vh rgba(255, 255, 255, 0.4);
+  width: 100%;
+  padding-top: 6vh;
+}
+footer .layout {
   height: 30vh;
   position: relative;
 }
 footer li.active {
   box-shadow: 0 0 .5vh .5vh rgba(255,255,255,0.8)
 }
-footer.layout span {
+footer .layout span {
   position: absolute;
   color: #fff;
   font-size: 6vh;
   opacity: 0;
 }
-footer.layout span:first-child {
+footer .layout span:first-child {
   top: 4vh;
   left: -8vh;
 }
-footer.layout span:nth-child(2) {
+footer .layout span:nth-child(2) {
   top: 4vh;
   right: -8vh;
 }
-footer.layout:hover span {
+footer:hover span {
   opacity: 0.5;
 }
-footer.layout span:hover{
+footer .layout span:hover{
   opacity: 1;
 }
-footer.layout .box {
+footer .layout .box {
   position: relative;
   height: 22vh;
   overflow: hidden;
 }
-footer.layout .box ul {
+footer .layout .box ul {
   height: 20vh;
   position: absolute;
   left: 0;
 }
-footer.layout .box ul .item {
+footer .layout .box ul .item {
   width: 20vh;
   height: 20vh;
   float: left;
   margin-right: 3vh;
 }
-footer.layout .box ul .item h3 {
+footer .layout .box ul .item h3 {
   font-size: 2vh;
   color: rgba(255,255,255,0.6);
   text-align: center;
   margin-top: 1vh;
   font-family: cursive;
 }
-footer.layout .box ul .item .img {
+footer .layout .box ul .item .img {
   width: 20vh;
   height: 15vh;
   background-size: cover;
